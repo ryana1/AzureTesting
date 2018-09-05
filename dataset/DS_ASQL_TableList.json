@@ -1,0 +1,17 @@
+{
+	"name": "DS_ASQL_TableList",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ASQL",
+			"type": "LinkedServiceReference"
+		},
+		"type": "AzureSqlTable",
+		"typeProperties": {
+			"source": {
+				"type": "SqlSource",
+				"sqlReaderQuery": "SELECT * FROM dbo.emp"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
