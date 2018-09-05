@@ -1,0 +1,14 @@
+{
+	"name": "SQLStatementList",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQLLookups",
+			"type": "LinkedServiceReference"
+		},
+		"type": "AzureSqlTable",
+		"typeProperties": {
+			"tableName": "[dbo].[ForEachStatements]"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

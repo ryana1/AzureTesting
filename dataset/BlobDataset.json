@@ -1,0 +1,30 @@
+{
+	"name": "BlobDataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureStorageLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"type": "AzureBlob",
+		"structure": [
+			{
+				"name": "FirstName",
+				"type": "String"
+			},
+			{
+				"name": "LastName",
+				"type": "String"
+			}
+		],
+		"typeProperties": {
+			"format": {
+				"type": "TextFormat",
+				"columnDelimiter": "|",
+				"treatEmptyAsNull": true
+			},
+			"fileName": "inputEmp.txt",
+			"folderPath": "adfv2tutorial/"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
