@@ -15,7 +15,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlSource",
-						"sqlReaderQuery": "Select SQLStatement From [dbo].[ForEachStatements]\nwhere columnname is null\n\n"
+						"sqlReaderQuery": "Select SQLStatement From [dbo].[ForEachStatements]\nwhere columnname is not null\n\n"
 					},
 					"dataset": {
 						"referenceName": "SQLStatementList",
