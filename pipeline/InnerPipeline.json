@@ -12,7 +12,6 @@
 						"type": "Expression"
 					},
 					"isSequential": false,
-					"batchCount": 4,
 					"activities": [
 						{
 							"name": "Stored Procedure1",
