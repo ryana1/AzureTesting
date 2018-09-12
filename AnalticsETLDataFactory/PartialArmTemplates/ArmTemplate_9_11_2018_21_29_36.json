@@ -6,46 +6,6 @@
 			"type": "string",
 			"metadata": "Data Factory Name",
 			"defaultValue": "AnalticsETLDataFactory"
-		},
-		"AzureSqlDatabase1_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
-		},
-		"AzureSqlDbLinkedService_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureSqlDbLinkedService'"
-		},
-		"AzureStorageLinkedService_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureStorageLinkedService'"
-		},
-		"LS_ABLB_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LS_ABLB'"
-		},
-		"LS_ASQL_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LS_ASQL'"
-		},
-		"LS_SQLLookups_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LS_SQLLookups'"
-		},
-		"BlobDataset_properties_typeProperties_fileName": {
-			"type": "string",
-			"defaultValue": "inputEmp.txt"
-		},
-		"BlobDataset_properties_typeProperties_folderPath": {
-			"type": "string",
-			"defaultValue": "adfv2tutorial/"
-		},
-		"DS_ABLB_GenericTableOutput_properties_typeProperties_fileName": {
-			"type": "string",
-			"defaultValue": ""
-		},
-		"DS_ABLB_GenericTableOutput_properties_typeProperties_folderPath": {
-			"type": "string",
-			"defaultValue": "blobs/"
 		}
 	},
 	"variables": {
@@ -61,7 +21,6 @@
 					{
 						"name": "CopyFromBlobToSQL",
 						"type": "Copy",
-						"dependsOn": [],
 						"policy": {
 							"timeout": "7.00:00:00",
 							"retry": 0,
@@ -69,7 +28,6 @@
 							"secureOutput": false,
 							"secureInput": false
 						},
-						"userProperties": [],
 						"typeProperties": {
 							"source": {
 								"type": "BlobSource",
@@ -85,20 +43,17 @@
 						"inputs": [
 							{
 								"referenceName": "BlobDataset",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "SqlDataset",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					}
-				],
-				"annotations": []
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/BlobDataset')]",
@@ -115,8 +70,6 @@
 					{
 						"name": "ForEach1",
 						"type": "ForEach",
-						"dependsOn": [],
-						"userProperties": [],
 						"typeProperties": {
 							"items": {
 								"value": "@pipeline().parameters.tableList\n",
@@ -128,7 +81,6 @@
 								{
 									"name": "Stored Procedure1",
 									"type": "SqlServerStoredProcedure",
-									"dependsOn": [],
 									"policy": {
 										"timeout": "7.00:00:00",
 										"retry": 0,
@@ -136,7 +88,6 @@
 										"secureOutput": false,
 										"secureInput": false
 									},
-									"userProperties": [],
 									"typeProperties": {
 										"storedProcedureName": "s_RunSQLStatement",
 										"storedProcedureParameters": {
@@ -162,12 +113,8 @@
 					"tableList": {
 						"type": "Array"
 					}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_SQLLookups')]"
-			]
+				}
+			}
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/OuterPipeline')]",
@@ -178,7 +125,6 @@
 					{
 						"name": "Lookup1",
 						"type": "Lookup",
-						"dependsOn": [],
 						"policy": {
 							"timeout": "7.00:00:00",
 							"retry": 0,
@@ -186,7 +132,6 @@
 							"secureOutput": false,
 							"secureInput": false
 						},
-						"userProperties": [],
 						"typeProperties": {
 							"source": {
 								"type": "SqlSource",
@@ -194,8 +139,7 @@
 							},
 							"dataset": {
 								"referenceName": "SQLStatementList",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							},
 							"firstRowOnly": false
 						}
@@ -211,7 +155,6 @@
 								]
 							}
 						],
-						"userProperties": [],
 						"typeProperties": {
 							"pipeline": {
 								"referenceName": "InnerPipeline",
@@ -226,8 +169,7 @@
 							}
 						}
 					}
-				],
-				"annotations": []
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/SQLStatementList')]",
@@ -244,8 +186,6 @@
 					{
 						"name": "ForEach1",
 						"type": "ForEach",
-						"dependsOn": [],
-						"userProperties": [],
 						"typeProperties": {
 							"items": {
 								"value": "@pipeline().parameters.tableList\n",
@@ -256,7 +196,6 @@
 								{
 									"name": "Copy Data1",
 									"type": "Copy",
-									"dependsOn": [],
 									"policy": {
 										"timeout": "7.00:00:00",
 										"retry": 0,
@@ -264,7 +203,6 @@
 										"secureOutput": false,
 										"secureInput": false
 									},
-									"userProperties": [],
 									"typeProperties": {
 										"source": {
 											"type": "SqlSource",
@@ -283,8 +221,7 @@
 									"inputs": [
 										{
 											"referenceName": "DS_ASQL_GenericTable",
-											"type": "DatasetReference",
-											"parameters": {}
+											"type": "DatasetReference"
 										}
 									],
 									"outputs": [
@@ -308,8 +245,7 @@
 					"tableList": {
 						"type": "Array"
 					}
-				},
-				"annotations": []
+				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DS_ASQL_GenericTable')]",
@@ -325,7 +261,6 @@
 					{
 						"name": "Lookup1",
 						"type": "Lookup",
-						"dependsOn": [],
 						"policy": {
 							"timeout": "7.00:00:00",
 							"retry": 0,
@@ -333,7 +268,6 @@
 							"secureOutput": false,
 							"secureInput": false
 						},
-						"userProperties": [],
 						"typeProperties": {
 							"source": {
 								"type": "SqlSource",
@@ -341,8 +275,7 @@
 							},
 							"dataset": {
 								"referenceName": "DS_SQL_Generic",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							},
 							"firstRowOnly": false
 						}
@@ -358,7 +291,6 @@
 								]
 							}
 						],
-						"userProperties": [],
 						"typeProperties": {
 							"pipeline": {
 								"referenceName": "PL_COPY_ASQL_To_ABLB",
@@ -373,8 +305,7 @@
 							}
 						}
 					}
-				],
-				"annotations": []
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DS_SQL_Generic')]",
@@ -390,7 +321,6 @@
 					"referenceName": "AzureStorageLinkedService",
 					"type": "LinkedServiceReference"
 				},
-				"annotations": [],
 				"type": "AzureBlob",
 				"structure": [
 					{
@@ -408,13 +338,10 @@
 						"columnDelimiter": "|",
 						"treatEmptyAsNull": true
 					},
-					"fileName": "[parameters('BlobDataset_properties_typeProperties_fileName')]",
-					"folderPath": "[parameters('BlobDataset_properties_typeProperties_folderPath')]"
+					"fileName": "inputEmp.txt",
+					"folderPath": "adfv2tutorial/"
 				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureStorageLinkedService')]"
-			]
+			}
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DS_ABLB_GenericTableOutput')]",
@@ -430,7 +357,6 @@
 						"type": "String"
 					}
 				},
-				"annotations": [],
 				"type": "AzureBlob",
 				"typeProperties": {
 					"format": {
@@ -438,16 +364,13 @@
 						"columnDelimiter": ",",
 						"treatEmptyAsNull": true
 					},
-					"fileName": "[parameters('DS_ABLB_GenericTableOutput_properties_typeProperties_fileName')]",
+					"fileName": "",
 					"folderPath": {
-						"value": "[parameters('DS_ABLB_GenericTableOutput_properties_typeProperties_folderPath')]",
+						"value": "blobs/",
 						"type": "Expression"
 					}
 				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_ABLB')]"
-			]
+			}
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DS_ASQL_GenericTable')]",
@@ -458,15 +381,11 @@
 					"referenceName": "LS_ASQL",
 					"type": "LinkedServiceReference"
 				},
-				"annotations": [],
 				"type": "AzureSqlTable",
 				"typeProperties": {
 					"tableName": "[concat('[', 'SalesLT].[Address]')]"
 				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_ASQL')]"
-			]
+			}
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DS_ASQL_TableList')]",
@@ -477,7 +396,6 @@
 					"referenceName": "LS_ASQL",
 					"type": "LinkedServiceReference"
 				},
-				"annotations": [],
 				"type": "AzureSqlTable",
 				"typeProperties": {
 					"source": {
@@ -485,10 +403,7 @@
 						"sqlReaderQuery": "SELECT * FROM dbo.emp"
 					}
 				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_ASQL')]"
-			]
+			}
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DS_SQL_Generic')]",
@@ -499,13 +414,8 @@
 					"referenceName": "LS_ASQL",
 					"type": "LinkedServiceReference"
 				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"typeProperties": {}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_ASQL')]"
-			]
+				"type": "AzureSqlTable"
+			}
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SQLStatementList')]",
@@ -516,15 +426,11 @@
 					"referenceName": "LS_SQLLookups",
 					"type": "LinkedServiceReference"
 				},
-				"annotations": [],
 				"type": "AzureSqlTable",
 				"typeProperties": {
 					"tableName": "[concat('[', 'dbo].[ForEachStatements]')]"
 				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_SQLLookups')]"
-			]
+			}
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SqlDataset')]",
@@ -535,93 +441,11 @@
 					"referenceName": "AzureSqlDbLinkedService",
 					"type": "LinkedServiceReference"
 				},
-				"annotations": [],
 				"type": "AzureSqlTable",
 				"typeProperties": {
 					"tableName": "dbo.emp"
 				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDbLinkedService')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase1')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('AzureSqlDatabase1_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureSqlDbLinkedService')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('AzureSqlDbLinkedService_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureStorageLinkedService')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('AzureStorageLinkedService_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_ABLB')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('LS_ABLB_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_ASQL')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('LS_ASQL_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_SQLLookups')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('LS_SQLLookups_connectionString')]"
-				}
-			},
-			"dependsOn": []
+			}
 		}
 	]
 }
