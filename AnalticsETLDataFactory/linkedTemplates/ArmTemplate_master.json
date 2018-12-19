@@ -1,0 +1,112 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory Name",
+			"defaultValue": "AnalticsETLDataFactory"
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
+		},
+		"AzureSqlDbLinkedService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDbLinkedService'"
+		},
+		"AzureStorageLinkedService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureStorageLinkedService'"
+		},
+		"LS_ABLB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_ABLB'"
+		},
+		"LS_ASQL_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_ASQL'"
+		},
+		"LS_SQLLookups_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_SQLLookups'"
+		},
+		"BlobDataset_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "inputEmp.txt"
+		},
+		"BlobDataset_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "adfv2tutorial/"
+		},
+		"DS_ABLB_GenericTableOutput_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"DS_ABLB_GenericTableOutput_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "blobs/"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas Token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureSqlDatabase1_connectionString": {
+						"value": "[parameters('AzureSqlDatabase1_connectionString')]"
+					},
+					"AzureSqlDbLinkedService_connectionString": {
+						"value": "[parameters('AzureSqlDbLinkedService_connectionString')]"
+					},
+					"AzureStorageLinkedService_connectionString": {
+						"value": "[parameters('AzureStorageLinkedService_connectionString')]"
+					},
+					"LS_ABLB_connectionString": {
+						"value": "[parameters('LS_ABLB_connectionString')]"
+					},
+					"LS_ASQL_connectionString": {
+						"value": "[parameters('LS_ASQL_connectionString')]"
+					},
+					"LS_SQLLookups_connectionString": {
+						"value": "[parameters('LS_SQLLookups_connectionString')]"
+					},
+					"BlobDataset_properties_typeProperties_fileName": {
+						"value": "[parameters('BlobDataset_properties_typeProperties_fileName')]"
+					},
+					"BlobDataset_properties_typeProperties_folderPath": {
+						"value": "[parameters('BlobDataset_properties_typeProperties_folderPath')]"
+					},
+					"DS_ABLB_GenericTableOutput_properties_typeProperties_fileName": {
+						"value": "[parameters('DS_ABLB_GenericTableOutput_properties_typeProperties_fileName')]"
+					},
+					"DS_ABLB_GenericTableOutput_properties_typeProperties_folderPath": {
+						"value": "[parameters('DS_ABLB_GenericTableOutput_properties_typeProperties_folderPath')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
