@@ -128,23 +128,23 @@
 							"storedProcedureParameters": {
 								"PathName": {
 									"value": "blobs",
-									"type": "nvarchar(260)"
+									"type": "string"
 								},
 								"TableName": {
 									"value": "All",
-									"type": "nvarchar(128)"
+									"type": "string"
 								},
 								"ReCreateTables": {
 									"value": "0",
-									"type": "bit"
+									"type": "bool"
 								},
 								"TableType": {
 									"value": "regular",
-									"type": "nvarchar(10)"
+									"type": "string"
 								},
 								"SystemTablesExist": {
 									"value": "0",
-									"type": "Int"
+									"type": "int"
 								}
 							}
 						},
