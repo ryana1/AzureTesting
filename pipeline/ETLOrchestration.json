@@ -1,0 +1,47 @@
+{
+	"name": "ETLOrchestration",
+	"properties": {
+		"activities": [
+			{
+				"name": "Stored Procedure1",
+				"type": "SqlServerStoredProcedure",
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"typeProperties": {
+					"storedProcedureName": "[Insight].[s_Import_Control]",
+					"storedProcedureParameters": {
+						"PathName": {
+							"value": "blobs",
+							"type": "nvarchar(260)"
+						},
+						"TableName": {
+							"value": "All",
+							"type": "nvarchar(128)"
+						},
+						"ReCreateTables": {
+							"value": "0",
+							"type": "bit"
+						},
+						"TableType": {
+							"value": "regular",
+							"type": "nvarchar(10)"
+						},
+						"SystemTablesExist": {
+							"value": "0",
+							"type": "Int"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDbLinkedService",
+					"type": "LinkedServiceReference"
+				}
+			}
+		]
+	}
+}
