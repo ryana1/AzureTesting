@@ -128,23 +128,23 @@
 							"storedProcedureParameters": {
 								"PathName": {
 									"value": "blobs",
-									"type": "string"
+									"type": "String"
 								},
 								"TableName": {
 									"value": "All",
-									"type": "string"
+									"type": "String"
 								},
 								"ReCreateTables": {
 									"value": "false",
-									"type": "bool"
+									"type": "Boolean"
 								},
 								"TableType": {
 									"value": "regular",
-									"type": "string"
+									"type": "String"
 								},
 								"SystemTablesExist": {
 									"value": "0",
-									"type": "int"
+									"type": "Int32"
 								}
 							}
 						},
