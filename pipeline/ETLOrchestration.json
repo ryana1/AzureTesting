@@ -24,7 +24,7 @@
 							"type": "string"
 						},
 						"ReCreateTables": {
-							"value": "0",
+							"value": "false",
 							"type": "bool"
 						},
 						"TableType": {
