@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Stored Procedure1",
+				"name": "s_Import_Control",
 				"type": "SqlServerStoredProcedure",
 				"policy": {
 					"timeout": "7.00:00:00",
