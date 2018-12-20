@@ -41,6 +41,38 @@
 					"referenceName": "AzureSqlDbLinkedService",
 					"type": "LinkedServiceReference"
 				}
+			},
+			{
+				"name": "s_T24ConsolKeys_Add",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "s_Import_Control",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"typeProperties": {
+					"storedProcedureName": "[Insight].[s_T24ConsolKeys_Add]",
+					"storedProcedureParameters": {
+						"TableName": {
+							"value": "All",
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDbLinkedService",
+					"type": "LinkedServiceReference"
+				}
 			}
 		]
 	}
