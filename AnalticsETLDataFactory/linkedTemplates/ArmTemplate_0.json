@@ -709,7 +709,7 @@
 									},
 									"userProperties": [],
 									"typeProperties": {
-										"storedProcedureName": "[concat('[', 'dbo].[s_ATestForEach]')]",
+										"storedProcedureName": "[concat('[', 'dbo].[s_InsightSource_CSI_UpdatebyTable]')]",
 										"storedProcedureParameters": {
 											"Sources": {
 												"value": "BS",
@@ -721,7 +721,7 @@
 											},
 											"TableName": {
 												"value": {
-													"value": "@activity('LookupExtractListTable').output.value",
+													"value": "@item().SourceTable",
 													"type": "Expression"
 												},
 												"type": "string"
