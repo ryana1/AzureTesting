@@ -12,6 +12,9 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
+				"typeProperties": {
+					"storedProcedureName": "ARunDataOperations"
+				},
 				"linkedServiceName": {
 					"referenceName": "AzureSqlDatabase1",
 					"type": "LinkedServiceReference"
