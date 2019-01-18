@@ -335,7 +335,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@activity('LookupExtractListTable').output.value[0].SourceTable",
+								"value": "@activity('LookupExtractListTable').output",
 								"type": "Expression"
 							},
 							"activities": [
