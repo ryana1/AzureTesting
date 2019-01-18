@@ -37,7 +37,7 @@
 				],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('LookupExtractListTable').output",
+						"value": "@activity('LookupExtractListTable').output.value",
 						"type": "Expression"
 					},
 					"activities": [
