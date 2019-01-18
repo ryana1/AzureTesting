@@ -5,7 +5,7 @@
 		"factoryName": {
 			"type": "string",
 			"metadata": "Data Factory Name",
-			"defaultValue": "AnalticsETLDataFactory"
+			"defaultValue": "analticsetldatafactory"
 		},
 		"AzureSqlDatabase1_connectionString": {
 			"type": "secureString",
@@ -177,6 +177,39 @@
 							"referenceName": "AzureSqlDbLinkedService",
 							"type": "LinkedServiceReference"
 						}
+					},
+					{
+						"name": "s_T24ConsolKeys_Add",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "s_Import_Control",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[concat('[', 'Insight].[s_T24ConsolKeys_Add]')]",
+							"storedProcedureParameters": {
+								"TableName": {
+									"value": "All",
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureSqlDbLinkedService",
+							"type": "LinkedServiceReference"
+						}
 					}
 				],
 				"annotations": []
@@ -246,6 +279,39 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_SQLLookups')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Operations')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Run Processes",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "ARunDataOperations"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureSqlDatabase1",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
 			]
 		},
 		{
