@@ -52,7 +52,7 @@
 								"secureInput": false
 							},
 							"typeProperties": {
-								"storedProcedureName": "[dbo].[s_ATestForEach]",
+								"storedProcedureName": "[dbo].[s_InsightSource_CSI_UpdatebyTable]",
 								"storedProcedureParameters": {
 									"Sources": {
 										"value": "BS",
