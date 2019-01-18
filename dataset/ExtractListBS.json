@@ -1,0 +1,13 @@
+{
+	"name": "ExtractListBS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDbLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"type": "AzureSqlTable",
+		"typeProperties": {
+			"tableName": "[dbo].[ExtractList]"
+		}
+	}
+}

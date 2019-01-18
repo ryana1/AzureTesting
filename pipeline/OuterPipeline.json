@@ -40,7 +40,7 @@
 						"referenceName": "InnerPipeline",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true,
+					"waitOnCompletion": false,
 					"parameters": {
 						"tableList": {
 							"value": "@activity('Lookup1').output.value",
