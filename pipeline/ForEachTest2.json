@@ -64,7 +64,7 @@
 									},
 									"TableName": {
 										"value": {
-											"value": "@activity('LookupExtractListTable').output.value",
+											"value": "@item().SourceTable",
 											"type": "Expression"
 										},
 										"type": "string"
