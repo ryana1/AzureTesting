@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Lookup1",
+				"name": "LookupExtractListTable",
 				"type": "Lookup",
 				"policy": {
 					"timeout": "7.00:00:00",
@@ -29,7 +29,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Lookup1",
+						"activity": "LookupExtractListTable",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -60,7 +60,7 @@
 									},
 									"TableName": {
 										"value": {
-											"value": "@activity('Lookup1').output",
+											"value": "@activity('LookupExtractListTable').output",
 											"type": "Expression"
 										},
 										"type": "string"
