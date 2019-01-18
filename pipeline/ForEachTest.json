@@ -11,6 +11,17 @@
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
 					"secureInput": false
+				},
+				"typeProperties": {
+					"source": {
+						"type": "SqlSource",
+						"sqlReaderQuery": "Select SourceTable from extractlist\nwhere sourcename = 'BS' and importflag = 1"
+					},
+					"dataset": {
+						"referenceName": "ExtractListBS",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
 				}
 			}
 		]
