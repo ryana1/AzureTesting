@@ -441,6 +441,25 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ExtractListBS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDbLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"typeProperties": {
+					"tableName": "[concat('[', 'dbo].[ExtractList]')]"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDbLinkedService')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/SQLStatementList')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -532,6 +551,103 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ForEachTest')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "LookupExtractListTable",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlSource",
+								"sqlReaderQuery": "Select SourceTable from extractlist\nwhere sourcename = 'BS' and importflag = 1"
+							},
+							"dataset": {
+								"referenceName": "ExtractListBS",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEachExtactListSourceTable",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "LookupExtractListTable",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('LookupExtractListTable').output",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "InsightSource Update by Table",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[concat('[', 'dbo].[s_InsightSource_CSI_UpdatebyTable]')]",
+										"storedProcedureParameters": {
+											"Sources": {
+												"value": "BS",
+												"type": "string"
+											},
+											"BSDate": {
+												"value": "2016-04-22",
+												"type": "datetime"
+											},
+											"TableName": {
+												"value": {
+													"value": "@activity('LookupExtractListTable').output",
+													"type": "Expression"
+												},
+												"type": "string"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "AzureSqlDbLinkedService",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ExtractListBS')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDbLinkedService')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/OuterPipeline')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -579,7 +695,7 @@
 								"referenceName": "InnerPipeline",
 								"type": "PipelineReference"
 							},
-							"waitOnCompletion": true,
+							"waitOnCompletion": false,
 							"parameters": {
 								"tableList": {
 									"value": "@activity('Lookup1').output.value",
@@ -594,153 +710,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/SQLStatementList')]",
 				"[concat(variables('factoryId'), '/pipelines/InnerPipeline')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_COPY_ASQL_To_ABLB')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "pipeline description",
-				"activities": [
-					{
-						"name": "ForEach1",
-						"type": "ForEach",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@pipeline().parameters.tableList\n",
-								"type": "Expression"
-							},
-							"isSequential": false,
-							"activities": [
-								{
-									"name": "Copy Data1",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "SqlSource",
-											"sqlReaderQuery": {
-												"value": "SELECT * From [@{item().TABLE_SCHEMA}].[@{item().TABLE_NAME}]",
-												"type": "Expression"
-											}
-										},
-										"sink": {
-											"type": "BlobSink",
-											"copyBehavior": "FlattenHierarchy"
-										},
-										"enableStaging": false,
-										"dataIntegrationUnits": 0
-									},
-									"inputs": [
-										{
-											"referenceName": "DS_ASQL_GenericTable",
-											"type": "DatasetReference",
-											"parameters": {}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "DS_ABLB_GenericTableOutput",
-											"type": "DatasetReference",
-											"parameters": {
-												"blobName": {
-													"value": "@item().TABLE_NAME",
-													"type": "Expression"
-												}
-											}
-										}
-									]
-								}
-							]
-						}
-					}
-				],
-				"parameters": {
-					"tableList": {
-						"type": "Array"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_ASQL_GenericTable')]",
-				"[concat(variables('factoryId'), '/datasets/DS_ABLB_GenericTableOutput')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/P_outer')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Lookup1",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlSource",
-								"sqlReaderQuery": "Select top 3 TABLE_SCHEMA,TABLE_NAME  FROM information_schema.TABLES WHERE TABLE_TYPE = 'BASE TABLE' and Table_Schema like '%sales%'"
-							},
-							"dataset": {
-								"referenceName": "DS_SQL_Generic",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "ExecutePipelineActivity",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Lookup1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "PL_COPY_ASQL_To_ABLB",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"tableList": {
-									"value": "@activity('Lookup1').output.value",
-									"type": "Expression"
-								}
-							}
-						}
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_SQL_Generic')]",
-				"[concat(variables('factoryId'), '/pipelines/PL_COPY_ASQL_To_ABLB')]"
 			]
 		}
 	]
