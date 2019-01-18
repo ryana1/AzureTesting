@@ -709,7 +709,7 @@
 									},
 									"userProperties": [],
 									"typeProperties": {
-										"storedProcedureName": "[concat('[', 'dbo].[s_InsightSource_CSI_UpdatebyTable]')]",
+										"storedProcedureName": "[concat('[', 'dbo].[s_ATestForEach]')]",
 										"storedProcedureParameters": {
 											"Sources": {
 												"value": "BS",
