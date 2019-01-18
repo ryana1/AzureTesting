@@ -23,6 +23,57 @@
 					},
 					"firstRowOnly": false
 				}
+			},
+			{
+				"name": "ForEachExtactListSourceTable",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"typeProperties": {
+					"activities": [
+						{
+							"name": "InsightSource Update by Table",
+							"type": "SqlServerStoredProcedure",
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"typeProperties": {
+								"storedProcedureName": "[dbo].[s_InsightSource_CSI_UpdatebyTable]",
+								"storedProcedureParameters": {
+									"Sources": {
+										"value": "BS",
+										"type": "string"
+									},
+									"BSDate": {
+										"value": "2016-04-22",
+										"type": "datetime"
+									},
+									"TableName": {
+										"value": {
+											"value": "@activity('Lookup1').output",
+											"type": "Expression"
+										},
+										"type": "string"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "AzureSqlDbLinkedService",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
 			}
 		]
 	}
