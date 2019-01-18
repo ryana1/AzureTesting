@@ -36,6 +36,10 @@
 					}
 				],
 				"typeProperties": {
+					"items": {
+						"value": "@activity('LookupExtractListTable').output",
+						"type": "Expression"
+					},
 					"activities": [
 						{
 							"name": "InsightSource Update by Table",
