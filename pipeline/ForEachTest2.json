@@ -4,6 +4,7 @@
 		"activities": [
 			{
 				"name": "LookupExtractListTable",
+				"description": "x",
 				"type": "Lookup",
 				"policy": {
 					"timeout": "7.00:00:00",
@@ -52,7 +53,7 @@
 								"secureInput": false
 							},
 							"typeProperties": {
-								"storedProcedureName": "[dbo].[s_InsightSource_CSI_UpdatebyTable]",
+								"storedProcedureName": "[dbo].[s_ATestForEach]",
 								"storedProcedureParameters": {
 									"Sources": {
 										"value": "BS",
