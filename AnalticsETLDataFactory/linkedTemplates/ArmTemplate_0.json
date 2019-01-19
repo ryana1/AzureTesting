@@ -655,6 +655,7 @@
 				"activities": [
 					{
 						"name": "LookupExtractListTable",
+						"description": "x",
 						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
@@ -709,7 +710,7 @@
 									},
 									"userProperties": [],
 									"typeProperties": {
-										"storedProcedureName": "[concat('[', 'dbo].[s_InsightSource_CSI_UpdatebyTable]')]",
+										"storedProcedureName": "[concat('[', 'dbo].[s_ATestForEach]')]",
 										"storedProcedureParameters": {
 											"Sources": {
 												"value": "BS",
