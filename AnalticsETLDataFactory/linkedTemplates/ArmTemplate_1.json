@@ -98,6 +98,50 @@
 										"referenceName": "AzureSqlDbLinkedService",
 										"type": "LinkedServiceReference"
 									}
+								},
+								{
+									"name": "Stored Procedure1",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [
+										{
+											"activity": "InsightSource Update by Table",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[concat('[', 'dbo].[s_ATestForEach]')]",
+										"storedProcedureParameters": {
+											"Sources": {
+												"value": "BS",
+												"type": "string"
+											},
+											"BSDate": {
+												"value": "2016-04-22",
+												"type": "datetime"
+											},
+											"TableName": {
+												"value": {
+													"value": "@item().SourceTable",
+													"type": "Expression"
+												},
+												"type": "string"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "AzureSqlDbLinkedService",
+										"type": "LinkedServiceReference"
+									}
 								}
 							]
 						}
