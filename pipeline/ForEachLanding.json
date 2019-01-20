@@ -1,0 +1,85 @@
+{
+	"name": "ForEachLanding",
+	"properties": {
+		"activities": [
+			{
+				"name": "LookupExtractListTable",
+				"description": "x",
+				"type": "Lookup",
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"typeProperties": {
+					"source": {
+						"type": "SqlSource",
+						"sqlReaderQuery": "Select SourceTable from extractlist\nwhere sourcename = 'BS' and importflag = 1"
+					},
+					"dataset": {
+						"referenceName": "ExtractListBS",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEachExtactListSourceTable",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "LookupExtractListTable",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('LookupExtractListTable').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "InsightSource Update by Table",
+							"type": "SqlServerStoredProcedure",
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"typeProperties": {
+								"storedProcedureName": "[dbo].[s_ATestForEach]",
+								"storedProcedureParameters": {
+									"Sources": {
+										"value": "BS",
+										"type": "string"
+									},
+									"BSDate": {
+										"value": "2016-04-22",
+										"type": "datetime"
+									},
+									"TableName": {
+										"value": {
+											"value": "@item().SourceTable",
+											"type": "Expression"
+										},
+										"type": "string"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "AzureSqlDbLinkedService",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			}
+		]
+	}
+}
