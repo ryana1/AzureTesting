@@ -85,6 +85,10 @@
 									"TotalThreads": {
 										"value": "1",
 										"type": "int"
+									},
+									"CreateRowBasedIndex": {
+										"value": "0",
+										"type": "int"
 									}
 								}
 							},
