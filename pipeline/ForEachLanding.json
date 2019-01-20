@@ -42,6 +42,7 @@
 						"value": "@activity('LookupExtractListTable').output.value",
 						"type": "Expression"
 					},
+					"batchCount": 50,
 					"activities": [
 						{
 							"name": "InsightSource Update by Table",
