@@ -1022,7 +1022,7 @@
 									"typeProperties": {
 										"storedProcedureName": "[concat('[', 'dbo].[s_InsightLanding_CSI_Table_UpdatebyTable]')]",
 										"storedProcedureParameters": {
-											"Sources": {
+											"SourceName": {
 												"value": "BS",
 												"type": "string"
 											},
@@ -1051,6 +1051,10 @@
 											},
 											"TotalThreads": {
 												"value": "1",
+												"type": "int"
+											},
+											"CreateRowBasedIndex": {
+												"value": "0",
 												"type": "int"
 											}
 										}
