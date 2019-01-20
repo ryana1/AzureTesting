@@ -53,7 +53,7 @@
 								"secureInput": false
 							},
 							"typeProperties": {
-								"storedProcedureName": "[dbo].[s_ATestForEach]",
+								"storedProcedureName": "[dbo].[s_InsightLanding_CSI_Table_UpdatebyTable]",
 								"storedProcedureParameters": {
 									"Sources": {
 										"value": "BS",
@@ -69,6 +69,22 @@
 											"type": "Expression"
 										},
 										"type": "string"
+									},
+									"DataCompression": {
+										"value": "COLUMNSTORE",
+										"type": "string"
+									},
+									"UpdateTableSchema": {
+										"value": "1",
+										"type": "int"
+									},
+									"BatchNum": {
+										"value": null,
+										"type": "int"
+									},
+									"TotalThreads": {
+										"value": null,
+										"type": "int"
 									}
 								}
 							},
