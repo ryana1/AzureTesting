@@ -5,7 +5,7 @@
 		"factoryName": {
 			"type": "string",
 			"metadata": "Data Factory Name",
-			"defaultValue": "analticsetldatafactory"
+			"defaultValue": "AnalticsETLDataFactory"
 		},
 		"AzureSqlDatabase1_connectionString": {
 			"type": "secureString",
