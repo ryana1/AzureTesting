@@ -87,7 +87,7 @@
 										"value": "1",
 										"type": "int"
 									},
-									"CreateRowBasedIndex": {
+									"CreateRowBaseIndex": {
 										"value": "0",
 										"type": "int"
 									},
