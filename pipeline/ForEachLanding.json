@@ -55,7 +55,7 @@
 							"typeProperties": {
 								"storedProcedureName": "[dbo].[s_InsightLanding_CSI_Table_UpdatebyTable]",
 								"storedProcedureParameters": {
-									"Sources": {
+									"SourceName": {
 										"value": "BS",
 										"type": "string"
 									},
