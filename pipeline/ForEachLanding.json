@@ -1,6 +1,7 @@
 {
 	"name": "ForEachLanding",
 	"properties": {
+		"description": "-x-",
 		"activities": [
 			{
 				"name": "LookupExtractListTable",
@@ -89,6 +90,10 @@
 									"CreateRowBasedIndex": {
 										"value": "0",
 										"type": "int"
+									},
+									"UserName": {
+										"value": "dbo",
+										"type": "string"
 									}
 								}
 							},
