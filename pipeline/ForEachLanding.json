@@ -91,7 +91,7 @@
 										"value": "0",
 										"type": "int"
 									},
-									"UserName": {
+									"UserId": {
 										"value": "dbo",
 										"type": "string"
 									}
