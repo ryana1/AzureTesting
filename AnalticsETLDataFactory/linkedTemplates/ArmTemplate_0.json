@@ -551,6 +551,129 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ForEachLanding')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "-x-",
+				"activities": [
+					{
+						"name": "LookupExtractListTable",
+						"description": "x",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlSource",
+								"sqlReaderQuery": "Select SourceTable from extractlist\nwhere sourcename = 'BS' and importflag = 1"
+							},
+							"dataset": {
+								"referenceName": "ExtractListBS",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEachExtactListSourceTable",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "LookupExtractListTable",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('LookupExtractListTable').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "InsightSource Update by Table",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[concat('[', 'dbo].[s_InsightLanding_CSI_Table_UpdatebyTable]')]",
+										"storedProcedureParameters": {
+											"SourceName": {
+												"value": "BS",
+												"type": "string"
+											},
+											"BSDate": {
+												"value": "2016-04-22",
+												"type": "datetime"
+											},
+											"TableName": {
+												"value": {
+													"value": "@item().SourceTable",
+													"type": "Expression"
+												},
+												"type": "string"
+											},
+											"DataCompression": {
+												"value": "COLUMNSTORE",
+												"type": "string"
+											},
+											"UpdateTableSchema": {
+												"value": "1",
+												"type": "int"
+											},
+											"BatchNum": {
+												"value": "1",
+												"type": "int"
+											},
+											"TotalThreads": {
+												"value": "1",
+												"type": "int"
+											},
+											"CreateRowBaseIndex": {
+												"value": "0",
+												"type": "int"
+											},
+											"UserId": {
+												"value": "dbo",
+												"type": "string"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "AzureSqlDbLinkedService",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ExtractListBS')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDbLinkedService')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ForEachTest')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -625,104 +748,6 @@
 											"TableName": {
 												"value": {
 													"value": "@activity('LookupExtractListTable').output",
-													"type": "Expression"
-												},
-												"type": "string"
-											}
-										}
-									},
-									"linkedServiceName": {
-										"referenceName": "AzureSqlDbLinkedService",
-										"type": "LinkedServiceReference"
-									}
-								}
-							]
-						}
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ExtractListBS')]",
-				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDbLinkedService')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ForEachTest2')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "LookupExtractListTable",
-						"description": "x",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlSource",
-								"sqlReaderQuery": "Select SourceTable from extractlist\nwhere sourcename = 'BS' and importflag = 1"
-							},
-							"dataset": {
-								"referenceName": "ExtractListBS",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "ForEachExtactListSourceTable",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "LookupExtractListTable",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('LookupExtractListTable').output.value",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "InsightSource Update by Table",
-									"type": "SqlServerStoredProcedure",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"storedProcedureName": "[concat('[', 'dbo].[s_ATestForEach]')]",
-										"storedProcedureParameters": {
-											"Sources": {
-												"value": "BS",
-												"type": "string"
-											},
-											"BSDate": {
-												"value": "2016-04-22",
-												"type": "datetime"
-											},
-											"TableName": {
-												"value": {
-													"value": "@item().SourceTable",
 													"type": "Expression"
 												},
 												"type": "string"
