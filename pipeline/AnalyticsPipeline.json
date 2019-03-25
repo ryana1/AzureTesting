@@ -1,0 +1,26 @@
+{
+	"name": "AnalyticsPipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "SPAct_s_MergeUpdateBatchStatus",
+				"type": "SqlServerStoredProcedure",
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 3,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[s_MergeUpdateBatchStatus]"
+				},
+				"linkedServiceName": {
+					"referenceName": "SQLDataset1",
+					"type": "LinkedServiceReference"
+				}
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
